@@ -73,7 +73,7 @@ public class Movement : MonoBehaviour
     }
     void Update()
     { 
-        if (Input.GetKeyDown("right"))
+        if (Input.GetKey("right"))
         {
             if (validMove(rowPos, colPos + 1))
             {
@@ -81,7 +81,7 @@ public class Movement : MonoBehaviour
                 body.MovePosition(new Vector3((int) rowPos, 1, (int) colPos));
             }
         }
-        if (Input.GetKeyDown("left"))
+        if (Input.GetKey("left"))
         {
             if (validMove(rowPos, colPos - 1))
             {
@@ -89,7 +89,7 @@ public class Movement : MonoBehaviour
                 body.MovePosition(new Vector3((int) rowPos, 1, (int) colPos));
             }
         }
-        if (Input.GetKeyDown("up"))
+        if (Input.GetKey("up"))
         {
             if (validMove(rowPos - 1, colPos))
             {
@@ -97,7 +97,7 @@ public class Movement : MonoBehaviour
                 body.MovePosition(new Vector3((int) rowPos, 1, (int) colPos));
             }
         }
-        if (Input.GetKeyDown("down"))
+        if (Input.GetKey("down"))
         {
             if (validMove(rowPos + 1, colPos))
             {
