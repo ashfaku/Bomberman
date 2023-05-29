@@ -251,8 +251,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c156e741437f47b687fceae9cd0a5cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rowPos: 1
-  colPos: 4
+  rowPos: -4
+  colPos: -4
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
