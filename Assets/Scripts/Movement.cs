@@ -5,7 +5,21 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     private Rigidbody body;
-    private float movementDistance = 1f;
+     int[,] bombermanLayout = new int[,]
+    {
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 0, 0, 0, 1, 0, 0, 0, 0, 1 },
+        { 1, 0, 1, 0, 1, 0, 1, 0, 1, 1 },
+        { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+        { 1, 1, 1, 1, 0, 1, 1, 1, 0, 1 },
+        { 1, 0, 0, 0, 0, 0, 1, 0, 0, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 0, 1, 1 },
+        { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+        { 1, 0, 1, 0, 1, 0, 1, 0, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+    };
+    private float movementSpeed = 1f;
+    [SerializeField] float rowPos = -4f, colPos = -4f;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,31 +27,54 @@ public class Movement : MonoBehaviour
         body = GetComponent<Rigidbody>();
         Application.targetFrameRate = -1;
         body.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+        body.MovePosition(new Vector3(rowPos, 1, colPos));
+
+        Debug.Log(rowPos + " " + colPos);
     }
 
+    private bool validMove(float newRow, float newCol)
+    {
+        Debug.Log(newRow + " " + newCol);
+        // if (newRow < 0 || newRow >= 10 || newCol < 0 || newCol >= 10)
+        //     return false;
+        // return bombermanLayout[newRow, newCol] == 0;
+        return true;
+    }
     // Update is called once per frame
     void Update()
     { 
+        if (Input.GetKeyDown("right"))
+        {
+            if (validMove(rowPos, colPos + 1))
+            {
+                colPos += 1f;
+                body.MovePosition(new Vector3((int) rowPos, 1, (int) colPos));
+            }
+        }
+        if (Input.GetKeyDown("left"))
+        {
+            colPos -= 1f;
+            body.MovePosition(new Vector3((int) rowPos, 1, (int) colPos));
+        }
+         if (Input.GetKeyDown("up"))
+        {
+            rowPos += 1f;
+            body.MovePosition(new Vector3((int) rowPos, 1, (int) colPos));
+        }
+         if (Input.GetKeyDown("down"))
+        {
+            rowPos -= 1f;
+            body.MovePosition(new Vector3((int) rowPos, 1, (int) colPos));
+        }
         // if (Input.GetKeyDown("space"))
         // {
         //     Vector3 newPosition = body.transform.position + new Vector3(0, 1, 0);
 
         //     body.MovePosition(newPosition);
         // }
-        // if (Input.GetKeyDown("left"))
-        // {
-
-        //     Vector3 newPosition = body.transform.position + new Vector3(-1, 0, 0);
-
-        //     body.MovePosition(newPosition);
-        // }
-        //  if (Input.GetKeyDown("right"))
-        // {
-
-        //     Vector3 newPosition = body.transform.position + new Vector3(1, 0, 0);
-
-        //     body.MovePosition(newPosition);
-        // }
+  
+       
         // if (Input.GetKeyDown("up"))
         // {
 
@@ -58,15 +95,7 @@ public class Movement : MonoBehaviour
         // body.velocity = new Vector3(horizontal * movementSpeed, body.velocity.y, vertical * movementSpeed);
         // if (Input.GetKeyDown("space"))
         //     body.velocity = new Vector3(-body.velocity.x, 10f, -body.velocity.z);
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            MoveObject();
-        }
+        
     }
 
-    void MoveObject()
-    {
-        Vector3 movement = new Vector3(0f, 0f, -movementDistance);
-        body.MovePosition(body.position + movement);
-    }
 }
