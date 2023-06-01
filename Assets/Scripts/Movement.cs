@@ -5,6 +5,8 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     private Rigidbody body;
+    private int bombRadius = 6;
+    public GameObject sphere;
     int[,] bombermanLayout = new int[,]
     {
         { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -43,33 +45,37 @@ public class Movement : MonoBehaviour
     }
     private void SpawnSphere(int row, int col)
     {
-        Debug.Log(row + " " + col);
+        Instantiate(sphere, new Vector3(row, 1, col), Quaternion.identity);
     }
     // Update is called once per frame
-    private void bfs(int row, int col)
+    private void bfs(int row, int col, int radius)
     {
+        if (radius <= 0)
+            return;
         if (row + 5 < 0 || row + 5 >= 10 || col + 5 < 0 || col + 5 >= 10)
             return;
+        bombermanLayout[row + 5, col + 5] = 2;
         if (validMove(row - 1, col))
         {
             SpawnSphere(row - 1, col);
-            bfs(row - 1, col);
+            bfs(row - 1, col, radius - 1);
         }
         if (validMove(row + 1, col))
         {
             SpawnSphere(row + 1, col);
-            bfs(row+ 1, col);
+            bfs(row+ 1, col, radius - 1);
         }
         if (validMove(row, col - 1))
         {
             SpawnSphere(row, col - 1);
-            bfs(row, col - 1);
+            bfs(row, col - 1, radius - 1);
         }
         if (validMove(row, col + 1))
         {
             SpawnSphere(row, col + 1);
-            bfs(row, col + 1);
+            bfs(row, col + 1, radius - 1);
         }
+
     }
     void Update()
     { 
@@ -109,7 +115,7 @@ public class Movement : MonoBehaviour
         if (Input.GetKeyDown("space"))
         {
             Debug.Log("space");
-           // bfs(rowPos, colPos);
+            bfs(rowPos, colPos, bombRadius);
         }
   
        
