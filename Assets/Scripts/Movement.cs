@@ -34,6 +34,12 @@ public class Movement : MonoBehaviour
 
         Debug.Log(rowPos + " " + colPos);
     }
+    private IEnumerator abc(int a)
+    {
+        Debug.Log(a);
+        yield return new WaitForSeconds(2f);
+        Debug.Log(45);
+    }
 
     private bool validMove(int newRow, int newCol)
     {
@@ -48,32 +54,54 @@ public class Movement : MonoBehaviour
         Instantiate(sphere, new Vector3(row, 1, col), Quaternion.identity);
     }
     // Update is called once per frame
-    private void bfs(int row, int col, int radius)
+    private IEnumerator bfs(int row, int col, int radius)
     {
         if (radius <= 0)
-            return;
+            yield break;
         if (row + 5 < 0 || row + 5 >= 10 || col + 5 < 0 || col + 5 >= 10)
-            return;
+            yield break;
         bombermanLayout[row + 5, col + 5] = 2;
-        if (validMove(row - 1, col))
+        bool top = validMove(row - 1, col);
+        bool bottom = validMove(row + 1, col);
+        bool left = validMove(row, col - 1);
+        bool right = validMove(row, col + 1) ;
+        if (top)
         {
             SpawnSphere(row - 1, col);
-            bfs(row - 1, col, radius - 1);
+          //  bfs(row - 1, col, radius - 1);
         }
-        if (validMove(row + 1, col))
+        if (bottom)
         {
             SpawnSphere(row + 1, col);
-            bfs(row+ 1, col, radius - 1);
+         //   bfs(row+ 1, col, radius - 1);
         }
-        if (validMove(row, col - 1))
+        if (left)
         {
             SpawnSphere(row, col - 1);
-            bfs(row, col - 1, radius - 1);
+         //   bfs(row, col - 1, radius - 1);
         }
-        if (validMove(row, col + 1))
+        if (right)
         {
             SpawnSphere(row, col + 1);
-            bfs(row, col + 1, radius - 1);
+        //    bfs(row, col + 1, radius - 1);
+        }
+        yield return new WaitForSeconds(1f);
+        radius--;
+        if (top)
+        {
+            StartCoroutine(bfs(row - 1, col, radius));
+        }
+        if (bottom)
+        {
+            StartCoroutine(bfs(row + 1, col, radius));
+        }
+        if (left)
+        {
+            StartCoroutine(bfs(row, col - 1, radius));
+        }
+        if (right)
+        {
+            StartCoroutine(bfs(row, col + 1, radius));
         }
 
     }
@@ -115,7 +143,8 @@ public class Movement : MonoBehaviour
         if (Input.GetKeyDown("space"))
         {
             Debug.Log("space");
-            bfs(rowPos, colPos, bombRadius);
+            StartCoroutine(bfs(rowPos, colPos, bombRadius));
+          ;
         }
   
        
